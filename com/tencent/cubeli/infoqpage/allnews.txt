@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!-- Meta, title, CSS, favicons, etc. -->
+  <meta charset="utf-8">
+  <title>Raven -   所有认领         
+                    </title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Theme CSS -->
+  <link rel="stylesheet" type="text/css" href="/assets/skin/default_skin/css/theme.css">
+  <link rel="stylesheet" href="/vendor/plugins/button/buttons.css">
+<style type="text/css">
+.searchinput{
+	border-right-width: 0px;
+	padding-left: 3px;
+	font-family: arial;
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	color: #636365;
+	margin-left: 4px;
+	font-size: 8pt;
+	vertical-align: middle;
+	border-left-width: 0px;
+	margin-right: 3px;
+
+}
+</style>
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="/assets/img/favicon.ico">
+  <link rel="stylesheet/less" type="text/css" href="/assets/skin/base/plugins/pnotify.less" />
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+  <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+<![endif]-->
+
+  <script>
+    function applyRss(id){
+      var request = $.ajax({
+        url: "/official/apply",
+        type: "POST",
+        data: 'rssid='+id,
+        dataType : 'json',
+      });
+      request.done(function(json) {
+        if (json.result) {
+          window.location = '/official/review?id='+json.id;
+          return true;
+        } else {
+            var opts = {
+                title: "申请失败",
+                text: json.error
+            };
+
+            alertErrorMsg(json.error);
+          return false;
+        }
+      });
+      request.fail(function(jqXHR, textStatus) {
+          var opts = {
+              title: "登录失败",
+              text: '网络错误'
+          };
+
+          alertErrorMsg('网络错误');
+      });
+    };
+
+    function releaseRss(id){
+      var result = confirm("确定释放?");
+      if (result) {
+        var request = $.ajax({
+          url: "/official/release",
+          type: "POST",
+          data: 'rssid='+id,
+          dataType : 'json',
+        });
+        request.done(function(json) {
+          if (json.result) {
+            window.location = window.location;
+            return true;
+          } else {
+            var opts = {
+                title: "释放失败",
+                text: json.error
+            };
+
+            alertErrorMsg(json.error);
+            return false;
+          }
+        });
+        request.fail(function(jqXHR, textStatus) {
+          var opts = {
+              title: "登录失败",
+              text: '网络错误'
+          };
+
+          alertErrorMsg('网络错误');
+        });
+      }
+    };
+    function hiddenRss(id){
+      var result = confirm("确定隐藏?");
+      if (result) {
+        var request = $.ajax({
+          url: "/official/hidden",
+          type: "POST",
+          data: 'rssid='+id,
+          dataType : 'json',
+        });
+        request.done(function(json) {
+          if (json.result) {
+            window.location = window.location;
+            return true;
+          } else {
+            var opts = {
+                title: "隐藏失败",
+                text: json.error
+            };
+
+            alertErrorMsg(json.error);
+            return false;
+          }
+        });
+        request.fail(function(jqXHR, textStatus) {
+          var opts = {
+              title: "登录失败",
+              text: '网络错误'
+          };
+
+          alertErrorMsg('网络错误');
+        });
+      }
+    };
+  </script>
+
+</head>
+
+<body class="blank-page">
+
+  <!-- Start: Theme Preview Pane -->
+  <!-- End: Theme Preview Pane -->
+
+  <!-- Start: Main -->
+  <div id="main">
+
+    <!-- Start: Header -->
+    
+    <header class="navbar navbar-fixed-top navbar-shadow bg-info">
+      <div class="navbar-branding bg-info">
+        <a class="navbar-brand" href="/dashboard/">
+          <b>Raven</b>
+        </a>
+        <span id="toggle_sidemenu_l" class="ad ad-lines"></span>
+      </div>
+
+      <ul class="nav navbar-nav navbar-left">
+        <li class="hidden-xs">
+          <a class="request-fullscreen toggle-active" href="#">
+            <span class="ad ad-screen-full fs18"></span>
+          </a>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right">
+        <!--
+		<li>
+          <div class="navbar-btn btn-group">
+            <a href="#" class="topbar-menu-toggle btn btn-sm" data-toggle="button">
+              <span class="ad ad-wand"></span>
+            </a>
+          </div>
+		</li>
+		-->
+        <li class="dropdown menu-merge">
+			<div class="navbar-btn btn-group">
+            <button data-toggle="dropdown" class="btn btn-sm dropdown-toggle">
+              <span class="fa fa-bell-o" ></span>
+                           </button>	
+            <div class="dropdown-menu dropdown-persist w400 animated animated-shorter fadeIn" role="menu">  
+              <div class="panel mbn">
+                  <div class="panel-menu">
+				
+
+                     <span class="panel-icon"><i class="fa fa-clock-o"></i></span>
+                     <span class="panel-title fw600">站内信</span>
+					 <a href="javascript:;" id="noti-settings" style="float:right;margin-left:15px;"><i class="fa fa-cog" title="设置通知发送方式"></i></a>
+					 <a href="javascript:;" id="noti-mark-read" style="float:right;margin-left:15px;"><i class="fa fa-check" title="全部标记为已读"></i></a>
+                  </div>
+									    <div class="content-header">
+                              <h3>- 没有新站内信 -</h3>
+                    </div>
+				                        <div class="panel-footer text-center p7">
+                    <a href="/messages" class="link-unstyled"><b style="color:#4ea5ad;">查看全部</b> </a>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <!--
+        <li class="dropdown menu-merge">
+        </li>
+        <li class="menu-divider hidden-xs">
+          <i class="fa fa-circle"></i>
+        </li>
+        <li class="dropdown menu-merge">
+          <div class="navbar-btn btn-group">
+            <a class="btn btn-sm dropdown-toggle" href="/logout/">
+              <span class="fa fa-power-off text-danger pr5"> Logout </span>
+            </a>
+          </div>
+        </li>
+        -->
+        <li class="dropdown menu-merge">
+          <a href="#" class="dropdown-toggle p15" data-toggle="dropdown" aria-expanded="false">
+            <img src="http://7xjybm.com1.z0.glb.clouddn.com/avatar_uid_350_1498727011762?e=1500796344&token=_Y1rSpxbGO9sgo-pkZNR_3uHtzS6qSiuq-Q0PXsX:nt-LjCsgMtq7unY5uskiPY1sK1c=" alt="avatar" height="40" width="40">
+            <span class="hidden-xs pl15"> 李勇 </span>
+            <span class="caret caret-tp hidden-xs"></span>
+          </a>
+          <ul class="dropdown-menu list-group dropdown-persist" role="menu">
+            <li class="list-group-item">
+              <a href="/messages" class="animated animated-short fadeInUp">
+                <span class="fa fa-envelope"></span> 系统消息
+                <span class="label label-warning">0</span>
+              </a>
+            </li>
+            <li class="list-group-item">
+              <a href="/profile/setting/" class="animated animated-short fadeInUp">
+                <span class="fa fa-gear"></span> 个人设置 </a>
+            </li>
+            <li class="dropdown-footer">
+              <a href="/logout/" class="">
+                <span class="fa fa-power-off pr5"></span> 退出 </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+<script src="/vendor/jquery/jquery-1.11.1.min.js"></script>
+<script src="/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function() {
+   $('#noti-mark-read').click(function(){
+        $.ajax({
+            type        : 'POST',
+            url         : '/messages/allMarkRead',
+            dataType    : 'json',
+            encode      : true
+        })
+        .done(function(json) {
+            // here we will handle errors and validation messages
+            if (json.result) {
+			 if($("#noti-count").length>0){
+			   $("#noti-count").empty();
+			   $("#noti-list").html("");
+			   $("#noti-list").removeClass();
+			   $("#noti-list").addClass("content-header");
+			   $("#noti-list").html("<h3>- 没有新站内信 -</h3>");
+			 }
+              return true;
+            } else {
+              return false;
+            }
+       }); 
+   });
+   $('#noti-settings').click(function(){
+      window.location.href="/profile/setting?tab=tab_message";
+   });
+});
+</script>
+
+    </header>    <!-- End: Header -->
+
+    <!-- Start: Sidebar -->
+    <aside id="sidebar_left" class="nano nano-light affix sidebar-light">
+
+<!-- Start: Sidebar Left Content -->
+<div class="sidebar-left-content nano-content">
+
+<!-- Start: Sidebar Header -->
+<header class="sidebar-header">
+    <link rel="stylesheet" type="text/css" href="/assets/fonts/glyphicons-pro/glyphicons-pro.css">
+    <!-- Sidebar Widget - Author -->
+    <div class="sidebar-widget author-widget">
+        <div class="media">
+            <a class="media-left" href="/profile/">
+                <img id="avatar" src="http://7xjybm.com1.z0.glb.clouddn.com/avatar_uid_350_1498727011762?e=1500796344&token=_Y1rSpxbGO9sgo-pkZNR_3uHtzS6qSiuq-Q0PXsX:nt-LjCsgMtq7unY5uskiPY1sK1c=" class="img-responsive" height="40"
+                     width="40">
+            </a>
+
+            <div class="media-body">
+                <div class="media-links"><p style="color: hotpink;"></p></div>
+                <div class="media-author">李勇</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sidebar Widget - Menu (slidedown) -->
+
+    <!-- Sidebar Widget - Search (hidden) -->
+    <div class="sidebar-widget search-widget hidden">
+        <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+              </span>
+            <input type="text" id="sidebar-search" class="form-control" placeholder="Search...">
+        </div>
+    </div>
+
+</header>
+<!-- End: Sidebar Header -->
+
+<!-- Start: Sidebar Menu -->
+<ul class="nav sidebar-menu">
+       <li class="sidebar-label pt20">文章管理</li>
+            
+        <li>
+        <a id="menu_official" class="accordion-toggle" href="#">
+            <span class="glyphicon glyphicon-subtitles"></span>
+            <span class="sidebar-title">翻译管理</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="nav sub-nav">
+            <li>
+                <a id="menu_official_all_news" href="/official/rss/news">
+                    <span class="fa fa-desktop"></span> 所有新闻</a>
+            </li>
+            <li>
+                <a id="menu_official_all_article" href="/official/rss/articles">
+                    <span class="fa fa-desktop"></span> 所有文章</a>
+            </li>
+            <li>
+                <a id="menu_official_all" href="/official/applied/all">
+                    <span class="fa fa-columns"></span> 所有认领 </a>
+            </li>
+            <li>
+                <a id="menu_official_mine" href="/official/applied/mine">
+                    <span class="fa fa-columns"></span> 我的认领 </a>
+            </li>
+        </ul>
+    </li>
+    
+    
+    
+       <!-- sidebar resources -->
+    <!-- <li class="sidebar-label pt20">素材管理</li>
+    <li>
+        <a id="menu_newstrack" class="accordion-toggle" href="#">
+            <span class="glyphicon glyphicon-fire"></span>
+            <span class="sidebar-title">新闻线索</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="nav sub-nav">
+            <li>
+                <a id="menu_newstrack_add" href="/newstrack/add">
+                    <span class="fa fa-warning"></span> 线索提交 </a>
+            </li>
+            <li>
+                <a id="menu_newstrack_all" href="/newstrack/all">
+                    <span class="fa fa-spinner"></span> 线索领取 </a>
+            </li>
+        </ul>
+    </li>
+    <li>
+		 
+        <a class="accordion-toggle" href="#">
+            <span class="fa fa-group"></span>
+            <span class="sidebar-title">演讲视频</span>
+            <span class="caret"></span>
+        </a>
+      
+        <ul class="nav sub-nav">
+          <li>
+            <a href="/presentation/videos">
+              <span class="fa fa-magic"></span> 演讲视频管理 </a>
+          </li>
+          <li>
+            <a href="/presentation/publish">
+              <span class="fa fa-exchange"></span> 发布演讲视频 </a>
+          </li>
+          <li>
+            <a href="/presentation/history">
+              <span class="fa fa-exchange"></span> 演讲发布记录 </a>
+          </li>
+        </ul>
+
+    </li>
+    <li>
+        <a class="accordion-toggle" href="#">
+            <span class="fa fa-microphone"></span>
+            <span class="sidebar-title">视频采访</span>
+            <span class="caret"></span>
+        </a>        -->
+        <!--
+        <ul class="nav sub-nav">
+          <li>
+            <a href="/interview/videos">
+              <span class="fa fa-magic"></span> 采访视频管理 </a>
+          </li>
+          <li>
+            <a href="/interview/publish">
+              <span class="fa fa-exchange"></span> 发布采访视频 </a>
+          </li>
+          <li>
+            <a href="/interview/history">
+              <span class="fa fa-exchange"></span> 采访发布记录 </a>
+          </li>
+        </ul>
+        
+    </li>-->
+ 
+   <!--    <li>
+        <a id="menu_email" class="accordion-toggle" href="#">
+            <span class="fa fa-envelope-o"></span>
+            <span class="sidebar-title">邮箱管理</span>
+            <span class="caret"></span>
+        </a>
+        <ul class="nav sub-nav">
+                <li>
+                    <a id="menu_email_show" href="/email/list">
+                        <span class="fa fa-envelope"></span> 收件箱</a>
+                </li>
+        </ul>
+ </li> -->
+
+ 
+    
+           <li class="sidebar-label pt20">商城</li>
+            <li>
+                <a id="menu_zb" class="accordion-toggle" href="#">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>
+                    <span class="sidebar-title">众包</span>
+                    <span class="caret"></span>
+                </a>
+                <ul class="nav sub-nav">
+                    <li>
+                        <a id="menu_zb_publish" href="/zb/publish">
+                            <span class="glyphicon glyphicon-edit"></span>发布项目</a>
+                    </li>
+                    <li>
+                        <a id="menu_zb_home" href="/zb/home">
+                            <span class="glyphicon glyphicon-home"></span>项目大厅 </a>
+                    </li>
+                    					<li>
+                        <a id="menu_zb_mine" href="/zb/mine">
+                            <span class="fa fa-bar-chart-o"></span>我的项目 </a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+            </li>
+        <li class="sidebar-label pt20">关于</li>
+    <li>
+        <a href="/docs/wiki/index.html" target="_blank">
+            <span class="glyphicon glyphicon-book"></span>
+            <span class="sidebar-title">Wiki</span>
+        </a>
+    </li>
+    <li>
+        <a href="http://form.mikecrm.com/Qz2jMl" target="_blank">
+            <span class="fa fa-bug"></span>
+            <span class="sidebar-title">FeedBack</span>
+        </a>
+    </li>
+
+<!-- sidebar progress bars -->
+
+
+</ul>
+<!-- End: Sidebar Menu -->
+
+<!-- Start: Sidebar Collapse Button -->
+<div class="sidebar-toggle-mini">
+    <a href="#">
+        <span class="fa fa-sign-out"></span>
+    </a>
+</div>
+<!-- End: Sidebar Collapse Button -->
+
+</div>
+<!-- End: Sidebar Left Content -->
+
+</aside>
+    <!-- Start: Content-Wrapper -->
+    <section id="content_wrapper">
+
+      <!-- Start: Topbar-Dropdown -->
+            <div id="topbar-dropmenu" class="alt">
+        <div class="topbar-menu row">
+          <div class="col-xs-2 col-sm-2">
+            <a href="/profile/setting" class="metro-tile bg-warning light">
+              <span class="fa fa-gears text-muted"></span>
+              <span class="metro-title">设置</span>
+            </a>
+          </div>
+          <div class="col-xs-2 col-sm-2">
+            <a href="#" class="metro-tile bg-success light">
+              <span class="glyphicon glyphicon-headphones text-muted"></span>
+              <span class="metro-title">帮助</span>
+            </a>
+          </div>
+        </div>
+      </div>      <!-- End: Topbar-Dropdown -->
+
+      <!-- Start: Topbar -->
+      <header id="topbar" class="alt">
+        <div class="topbar-left">
+          <ol class="breadcrumb">
+            <li class="crumb-link">
+              <span>文章管理</span>
+            </li>
+            <li class="crumb-link">
+              <span>翻译管理</span>
+            </li>
+            <li class="crumb-active">
+              <a href="/official/applied/all">
+                  所有认领         
+                              </a>
+            </li>
+          </ol>
+        </div>
+        <div class="topbar-right">
+        </div>
+      </header>
+      <!-- End: Topbar -->
+
+      <!-- Begin: Content -->
+      <section id="content" class="animated fadeIn">
+        <div class="panel" id="spy3">
+			<style>
+  /*demo styles*/
+  #alert-demo-1{
+    display: none;
+  }
+</style>
+<div class="special-alerts">
+  <div class="alert alert-sm alert-border-left alert-danger alert-dismissable" id="alert-demo-1">
+
+    <i class="fa fa-info pr10"></i>
+    <strong id="alertErrorMsg"></strong>
+  </div>
+</div>
+<script type="text/javascript">
+   function alertErrorMsg(ErrorMsg){
+     $('#alertErrorMsg').html(ErrorMsg);
+	 $('#alert-demo-1').slideUp('fast');
+	 $('#alert-demo-1').slideDown('fast');
+   }
+</script>          <div class="panel-heading">
+              <span class="panel-title">
+                <span class="fa fa-table">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+				 																</span></span>
+            <div class="pull-right hidden-xs">
+            </div>
+          </div>
+          <div class="panel-body pn">
+			
+            <div class="">
+              <table class="table table-hover">
+                <thead>
+                <tr>
+                  <th>#</th>
+                  <th class="col-lg-6">标题</th>
+                  <th class="col-lg-1">发表时间</th>
+                  <th class="col-lg-1">状态</th>
+                  <th class="col-lg-1">译者</th>
+                  <th class="col-lg-3">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+				                			
+                <tr>
+                  <td>#1</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/news/2017/07/aotb-2017-day-one" target="_blank">The Importance of Learning, Psychological Safety, and Continuous Delivery: Agile on the Beach  2017 </a>
+				
+                    <p>At the Agile on the Beach 2017 conference, run in Cornwall, UK, several hundred speakers and attendees gathered to discuss the latest developments within the field of agile and post-agile software development methodologies. </p> 
+					
+                  </td>
+                  <td>2017/07/19</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=279" target="_blank">Rays</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8828" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#2</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/news/2017/07/jetbrains-elected-to-jcp" target="_blank">Trisha Gee Speaks to InfoQ on JetBrains Elected to the JCP Executive Committee </a>
+				
+                    <p>In a recent special election, JetBrains was elected to the JCP Executive Committee to fill one of the seats vacated by Ericsson and TOTVS. Trisha Gee, developer and technical advocate at JetBrains, spoke to InfoQ about this latest milestone for JetBrains, what they plan to accomplish, the recent JSR 376 vote, and plans for future development. </p> 
+					
+                  </td>
+                  <td>2017/07/19</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=233" target="_blank">NER</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8827" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#3</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/news/2017/07/rider-rc1" target="_blank">Rider Adds Performance Gains in RC1 </a>
+				
+                    <p>JetBrains' Rider, the company's .NET-focused multiplatform IDE, has just produced its first Release Candidate. In this latest preview, NuGet support is expanded, general performance improved (particularly on Windows), and a few more usability enhancements are added.</p> 
+					
+                  </td>
+                  <td>2017/07/17</td>
+                  <td>
+                                        已发布
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=279" target="_blank">Rays</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8826" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#4</td>
+                  <td>	
+										<span class="badge  badge-danger">HOT</span>
+				                        <a href="http://www.infoq.com/news/2017/07/versioning-event-sourcing" target="_blank">Versioning of Events in Event Sourced Systems </a>
+				
+                    <p>A challenge with event sourced systems is that events put in the event store years ago must be readable today, even though the software has gone through numerous changes, Greg Young stated in his presentation at this year’s DDD eXchange conference. If a system can be taken down, versioning of events is relatively simple. The real challenge comes when a system can’t be taken down. </p> 
+					
+                  </td>
+                  <td>2017/07/17</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=34" target="_blank">张卫滨</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8825" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#5</td>
+                  <td>	
+										<span class="badge  badge-danger">HOT</span>
+				                        <a href="http://www.infoq.com/articles/Java-Jigsaw-Migration-Guide" target="_blank">Article: Painlessly Migrating to Java Jigsaw Modules - a Case Study </a>
+				
+                    <p>This article is a case study of changes required in an application to make use of the new Java Platform Module System. An understanding of the module system will become an important skill for Java developers, using Java 9 and beyond. </p> 
+					
+                  </td>
+                  <td>2017/07/17</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=291" target="_blank">薛命灯</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8824" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#6</td>
+                  <td>	
+										<span class="badge  badge-danger">HOT</span>
+				                        <a href="http://www.infoq.com/articles/transform-projects-products" target="_blank">Article: Transforming From Projects to Products </a>
+				
+                    <p>Agile Transformation is much harder than most organisations envisage, and can requires a major cultural change for the transformation to be effective. Too often we make superficial changes but continue the same behaviour with minor changes to processes to appear agile. But without a change in mindset we fail to see the true impact an Agile Transformation can really have.</p> 
+					
+                  </td>
+                  <td>2017/07/01</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=323" target="_blank">王强</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8786" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#7</td>
+                  <td>	
+										<span class="badge  badge-danger">HOT</span>
+				                        <a href="http://www.infoq.com/news/2017/07/oracle-container-utilities" target="_blank">Oracle Release Open Source Container Utilities, Including A New Container Runtime Written in Rust </a>
+				
+                    <p>Oracle have released three open source container utilities including Smith, an OCI image-compliant container builder that creates “microcontainers” with a single executable and its dependencies; Crashcart, a microcontainer debugging tool; and Railcar, a Rust-based alternative container runtime that implements the OCI-runtime specification.</p> 
+					
+                  </td>
+                  <td>2017/07/10</td>
+                  <td>
+                                        待发布
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=34" target="_blank">张卫滨</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8803" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#8</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/articles/migrate-mainframe-aws" target="_blank">Article: 5 Steps to Migrate Unisys Mainframes to AWS </a>
+				
+                    <p>If you have a Unisys mainframe, you may be thinking that cloud computing isn’t an option. But cloud computing has quickly matured, as have the offerings of service providers like AWS, and it’s now proving itself to be a viable option for running mainframe application workloads.</p> 
+					
+                  </td>
+                  <td>2017/07/16</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=279" target="_blank">Rays</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8823" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#9</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/news/2017/07/twistlock-2.1-released" target="_blank">Twistlock 2.1 Container Security Suite Released </a>
+				
+                    <p>Twistlock announced the general availability of version 2.1 of their container security product. Highlights of the release include an integrated firewall that understands application traffic, vulnerability detection, secrets management via integration with third party tools, and compliance alerting and enforcement. </p> 
+					
+                  </td>
+                  <td>2017/07/16</td>
+                  <td>
+                                        待翻译
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=316" target="_blank">罗远航</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8822" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                			
+                <tr>
+                  <td>#10</td>
+                  <td>	
+					                    <a href="http://www.infoq.com/news/2017/07/Salesforce-Einstein" target="_blank">Salesforce Brings Cognitive to CRM, Launches 3 New Services </a>
+				
+                    <p>In a recent blog post, Salesforce announced the addition of three cognitive services to its Einstein artificial intelligence (AI) platform. The three new services enable detecting sentiment, intent and object detection. Salesforce customers can then use these services to automate insight and use predictive modelling within their CRM apps.</p> 
+					
+                  </td>
+                  <td>2017/07/08</td>
+                  <td>
+                                        已发布
+                                      </td>
+                  <td>
+                                        <a href="/profile?id=350" target="_blank">李勇</a>
+                                      </td>
+                  <td>
+                    <div class="btn-group">
+                                            <button type="button" class="btn btn-sm btn-rounded btn-default" disabled="disabled">
+                        <a href="" class="fa fa-shopping-cart text-default">领取</a>
+                      </button>
+                      
+                                              <button type="button" class="btn btn-sm btn-rounded btn-default">
+                          <a href="/official/review?id=8799" class="fa fa-search text-default">查看</a>
+                        </button>
+                        											                        <!--
+                      <button type="button" class="btn btn-sm btn-rounded btn-warning">
+                        <i class="fa fa-lock">过滤</i>
+                      </button>
+                      -->
+                    </div>
+                  </td>
+                </tr>
+                                </tbody>
+              </table>
+            </div>
+          </div>
+		  <div class="panel-footer clearfix" >
+                    <script type="text/javascript">
+function getUrlVars(){
+         var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for(var i = 0; i < hashes.length; i++){
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hash[1];
+        }
+        return vars;
+}
+function getUrlVar(name){
+    return getUrlVars()[name];
+}
+function composeUrlParams(){
+    var param='';
+    $.each(getUrlVars(), function(i, item) {
+    if(item!='page'){
+        var val=getUrlVar(item);
+        if(val) param += "&" + item+"="+val;
+    }
+    });
+    return param;
+}
+ function paging(pageUrl,page){
+  var params = composeUrlParams();
+  window.location.href =pageUrl+"?"+params+"&page="+page;
+ }
+</script>
+<nav>
+		<ul class="pagination pull-right">
+                <li class="prev disabled"><a href="#"><i class="fa fa-angle-left"></i> 上一页</a></li>
+		         <li class="active"><a href="javascript:paging('/official/applied/all','1')">1</a></li>
+				   <li><a href="javascript:paging('/official/applied/all','2')">2</a></li>
+						   <li><a href="javascript:paging('/official/applied/all','3')">3</a></li>
+						   <li><a href="javascript:paging('/official/applied/all','4')">4</a></li>
+						   <li><a href="javascript:paging('/official/applied/all','5')">5</a></li>
+				 			
+        <li class="next"><a href="javascript:paging('/official/applied/all','2');">下一页 <i class="fa fa-angle-right"></i></a></li>
+		     </ul>
+   	</nav>          </div>
+        </div>
+      </section>
+      <!-- End: Content -->
+
+    </section>
+
+    <!-- Start: Right Sidebar -->
+    <!-- End: Right Sidebar -->
+
+  </div>
+  <!-- End: Main -->
+
+  <!-- BEGIN: PAGE SCRIPTS -->
+
+  <!-- jQuery -->
+  <script src="/vendor/jquery/jquery-1.11.1.min.js"></script>
+  <script src="/vendor/jquery/jquery_ui/jquery-ui.min.js"></script>
+
+  <!-- PNotify -->
+  <script src="/vendor/plugins/pnotify/pnotify.js"></script>
+
+  <!-- Theme Javascript -->
+  <script src="/assets/js/utility/utility.js"></script>
+  <script src="/assets/js/demo/demo.js"></script>
+  <script src="/assets/js/main.js"></script>
+  <script type="text/javascript">
+  jQuery(document).ready(function() {
+
+    "use strict";
+
+    // Init Theme Core    
+    Core.init();
+
+    // Init Demo JS  
+    Demo.init();
+
+    $('#menu_official').addClass('menu-open');
+
+          $('#menu_official_all').addClass('menu-open');
+      });
+  function search(){
+    var title = $('#title').val();
+	var menu = $('#menu').val();
+	var hot = $('#hot').val();
+	var apply = $('#apply').val();
+	if(title == '- Search Title -'){
+	   title="";
+	}
+	if(menu == 'all_news') window.location.href="/official/rss/news?title="+title+"&apply="+apply+"&hot="+hot;
+	if(menu == 'all_article') window.location.href="/official/rss/articles?title="+title+"&apply="+apply+"&hot="+hot;
+  }
+  </script>
+  <!-- END: PAGE SCRIPTS -->
+
+</body>
+
+</html>
