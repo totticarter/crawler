@@ -44,7 +44,7 @@ def getLinks(postDict,logined):
 
     for urlFile in urls:
         url = urls[urlFile]
-        print urlFile
+        # print urlFile
         response = logined[0].get(url, cookies=logined[1].cookies, headers=headers)
         link_list = re.findall(r"(?<=href=\").+?(?=\")|(?<=href=\').+?(?=\')", response.content)
         pattern = re.compile(r'http://www.infoq.com')
@@ -52,9 +52,10 @@ def getLinks(postDict,logined):
         for sublink in link_list:
             match = pattern.match(sublink)
             if match:
-                print sublink
-                file.writelines(sublink+'\n')
-                break
+                if urlFile == 'rssNews' or urlFile == 'rssArticles':
+                    print sublink
+                    file.writelines(sublink+'\n')
+                    break
 
 
 
